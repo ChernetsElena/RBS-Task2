@@ -40,7 +40,6 @@ func main() {
 		log.Printf("ERROR sortByDate, %s\n", err)
 		return
 	}
-	log.Println(data)
 
 	// форматированный вывод
 	print(data)
@@ -79,22 +78,22 @@ func sortByDate(data []Indication) (err error) {
 
 	var (
 		sortedData []Indication
+		saveObject Indication
 	)
 
-	for j := 0; j < len(data); j++ {
-		var max int64 = 0
-		var index int = 0
-		for i, item := range data {
-			if item.Date.Unix() > max {
-				max = item.Date.Unix()
-				index = i
+	sortedData = data
+
+	for i := 0; i < len(sortedData); i++ {
+		for j := i; j < len(sortedData); j++ {
+			if sortedData[i].Date.Unix() < sortedData[j].Date.Unix() {
+				saveObject = sortedData[i]
+				sortedData[i] = sortedData[j]
+				sortedData[j] = saveObject
 			}
 		}
-		sortedData = append(sortedData, data[index])
-		data[index].Date = time.Time{}
 	}
 
-	data = sortedData
+	//data = sortedData
 
 	return
 }
